@@ -3,13 +3,15 @@
 // node dev.js (要打包的名字 -f 打包格式) === argv.slice(2) 
 
 import minimist from "minimist";
-import { resolve, fileUrlToPath, dirname } from "path"
+import { resolve, dirname } from "path"
+import { fileURLToPath} from 'url'
+import { createRequire } from 'module'
 import esbuild from 'esbuild'
 
 const args = minimist(process.argv.slice(2));
 
 // node中esm模块没有__dirname，需要通过自行解析获取
-const __filename = fileUrlToPath(import.meta.url); // 获取当前文件的绝对路径 file: -> /path
+const __filename = fileURLToPath(import.meta.url); // 获取当前文件的绝对路径 file: -> /path
 const __dirname = dirname(__filename); // 获取当前文件的目录路径
 
 const target = args._[0] || "reactivity"; // 打包哪个项目
@@ -17,7 +19,9 @@ const format = args.f || "iife"; // 打包格式（iife 立即执行函数）
 
 // 入口文件路径
 const entry = resolve(__dirname, `../packages/${target}/src/index.ts`)
-const pkg = require('../packages/${target}/package.json')
+
+const require = createRequire(import.meta.url);
+const pkg = require(`../packages/${target}/package.json`)
 
 // 开始打包
 esbuild.context({
@@ -31,4 +35,6 @@ esbuild.context({
 }).then((ctx) => {
   console.log("start dev")
   return ctx.watch(); // 监听文件变化
-}
+}).catch((err) => {
+  console.error(err)
+})
