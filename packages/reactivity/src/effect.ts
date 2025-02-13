@@ -46,3 +46,9 @@ export function trackEffect(effect, dep) {
   // 让effect与dep关联起来
   effect.deps[effect._depsLength++] = dep;
 }
+
+export function triggerEffects(dep) {
+  for(const effect of dep.keys()) {
+    if (effect.scheduler) effect.scheduler();
+  }
+}

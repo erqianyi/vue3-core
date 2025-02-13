@@ -1,4 +1,4 @@
-import { activeEffect, effect, trackEffect } from './effect';
+import { activeEffect, effect, trackEffect, triggerEffects } from './effect';
 
 function createDep(cleanUp, key) {
   const dep = new Map() as any;
@@ -27,6 +27,15 @@ export function track(target, key) {
     trackEffect(activeEffect, dep); // 将当前effect添加到dep（映射表）中，后续可根据值的变化出发此dep中的effect
 
     console.log(targetMap);
+  }
+}
+
+export function trigger(target, key, value, oldValue) {
+  const depsMap = targetMap.get(target)
+  if (!depsMap) return // 找不到对象，直接返回
+  const dep = depsMap.get(key)
+  if (dep){
+    triggerEffects(dep)
   }
 }
 
