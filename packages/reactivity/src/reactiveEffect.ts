@@ -3,7 +3,7 @@ import { activeEffect, effect, trackEffect, triggerEffects } from './effect';
 function createDep(cleanUp, key) {
   const dep = new Map() as any;
   dep.cleanUp = cleanUp;
-  dep.key = key;
+  dep.name = key;
   return dep;
 }
 
@@ -26,7 +26,6 @@ export function track(target, key) {
 
     trackEffect(activeEffect, dep); // 将当前effect添加到dep（映射表）中，后续可根据值的变化出发此dep中的effect
 
-    console.log(targetMap);
   }
 }
 
