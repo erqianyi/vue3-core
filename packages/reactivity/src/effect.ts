@@ -40,7 +40,7 @@ export class ReactiveEffect {
 
 
   run() {
-    this._dirtyLevel = DirtyLevels.NoDirty;
+    this._dirtyLevel = DirtyLevels.NoDirty; // 每次运行后，effect变为no_dirty
     // 让fn执行
     if (!this.active) {
       return this.fn(); // 如果不是响应式的，直接执行

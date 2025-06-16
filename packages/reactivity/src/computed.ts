@@ -16,7 +16,7 @@ class ComputedRefImpl {
     )
   }
 
-  get value() {
+  get value() { // 让计算属性收集对应的effect
     if (this.effect.dirty) {
       this._value= this.effect._value
       // 如果当前在effect中访问了计算属性，那么计算属性就会收集到effect
