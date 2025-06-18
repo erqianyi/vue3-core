@@ -61,7 +61,12 @@ export class ReactiveEffect {
     }
   }
   stop() {
-    this.active = false; // TODO: 停止effect
+    if (this.active) {
+      // 停止effect
+      this.active = false;
+      preCleanEffect(this);
+      postCleanEffect(this);
+    }
   }
 }
 export function effect(fn, options?) {
